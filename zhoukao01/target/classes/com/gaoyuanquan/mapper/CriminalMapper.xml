@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaoyuanquan.mapper.CriminalMapper">
+	<select id="getList" resultType="com.gaoyuanquan.bean.Criminal">
+		select * from tb_criminal where name like '%${value}%'
+	</select>
+	<insert id="addCriminal">
+		insert into tb_criminal set name=#{name},age=${age},sex=#{sex},desce=#{desce}
+	</insert>
+	<select id="selById" resultType="com.gaoyuanquan.bean.Criminal">
+		select * from tb_criminal where cid = ${value}
+	</select>
+	<update id="updCriminal">
+		update tb_criminal set name=#{name},age=${age},sex=#{sex},desce=#{desce} where cid = ${cid}
+	</update>
+	<delete id="del">
+		delete from tb_criminal where cid = ${value}
+	</delete>
+</mapper>
