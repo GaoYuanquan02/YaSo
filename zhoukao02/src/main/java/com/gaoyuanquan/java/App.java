@@ -1,4 +1,4 @@
-package com.gaoyuanquan;
+package com.gaoyuanquan.java;
 
 /**
  * Hello world!

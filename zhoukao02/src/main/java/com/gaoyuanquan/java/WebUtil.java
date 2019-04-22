@@ -1,4 +1,4 @@
-package com.gaoyuanquan;
+package com.gaoyuanquan.java;
 /**
  * Web工具类
 */
