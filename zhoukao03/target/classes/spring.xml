@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+
+
+<!--开启注解扫描器 -->
+	<context:component-scan base-package="com.gaoyuanquan"></context:component-scan>
+	<!-- 3.数据源 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql:///1701c?useUnicode=true&amp;characterEncoding=UTF-8"/>
+		<property name="username" value="root"/>
+		<property name="password" value="123"/>
+		
+	</bean>
+
+
+	<!--4、 配置mybatis SqlSessionFactory -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 关联mybatis配置文件 -->
+		<property name="configLocation" value="classpath:mybatis.xml"></property>
+	</bean>
+
+
+
+	<!--5、 配置jdbc事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!--6、 配置事务 transaction-manager:表示关联的事务管理器是谁 -->
+	<tx:advice transaction-manager="transactionManager"
+		id="txAdvice">
+		<!-- 事务属性配置 -->
+		<tx:attributes>
+			<!-- 以find.select get开头的方法为只读事务，用来提高数据库的性能 -->
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="list*" read-only="true" />
+			<!-- 其他的方法为默认事务 -->
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 7、配置aop -->
+	<aop:config>
+		<!-- 配置切点表达式 -->
+		<aop:pointcut
+			expression="execution(* com.gaoyuanquan.service.*.*(..))" id="pointcut" />
+		<!-- 关联事务 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut" />
+
+	</aop:config>
+
+	<!-- 扫描mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- basePackage :mapper接口所在的包 -->
+		<property name="basePackage" value="com.gaoyuanquan.mapper"></property>
+	</bean>
+
+</beans>

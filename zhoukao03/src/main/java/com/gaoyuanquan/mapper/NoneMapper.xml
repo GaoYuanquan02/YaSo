@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaoyuanquan.mapper.NoneMapper">
+	<select id="getList" resultType="map">
+		select * from none a left join dept b on a.did = b.did 
+		where name like '%${value}%'
+	</select>
+	<select id="selById" resultType="map">
+		select * from none a left join dept b on a.did = b.did where id = ${value}
+	</select>
+	
+</mapper>
