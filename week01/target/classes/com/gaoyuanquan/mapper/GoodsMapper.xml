@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaoyuanquan.mapper.GoodsMapper">
+	<!-- 列表 -->
+	<select id="getList" resultType="map">
+		select * from tb_goods a 
+		left join tb_brand b on a.bid=b.bid 
+		left join tb_goodskind c on a.kid=c.kid
+		where gname like '%${value}%'
+	</select>
+	<!-- 查询品牌 -->
+	<select id="getBrand" resultType="com.gaoyuanquan.bean.Brand">
+		select * from tb_brand
+	</select>
+	<!-- 查询种类 -->
+	<select id="getKind" resultType="com.gaoyuanquan.bean.Goodskind">
+		select * from tb_goodskind
+	</select>
+	<!-- 添加 -->
+	<insert id="add">
+		insert into tb_goods set gname=#{gname},bid=${bid},kid=${kid},size=#{size},price=#{price},count=#{count},biao=#{biao}
+	</insert>
+	<!-- 回显 -->
+	<select id="selById" resultType="com.gaoyuanquan.bean.Goods">
+		select * from tb_goods where gid = ${value}
+	</select>
+	<!-- 修改 -->
+	<update id="upd">
+		update tb_goods set gname=#{gname},bid=${bid},kid=${kid},size=#{size},price=#{price},count=#{count},biao=#{biao} where gid =${gid}
+	</update>
+	<!-- 批量删除 -->
+	<delete id="delAll">
+		delete from tb_goods where gid in (${value})
+	</delete>
+</mapper>
